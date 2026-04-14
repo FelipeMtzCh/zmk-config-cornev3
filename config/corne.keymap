@@ -1,0 +1,212 @@
+/*
+ * Copyright (c) 2020 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * Optimized Corne Keymap
+ * - Capa 0: QWERTY con Homerow Mods
+ * - Capa 1: Símbolos (tap = apertura, double-tap = cierre) + Numpad derecho
+ * - Capa 2: Config RGB, Bluetooth, Multimedia, Combos (Ctrl+C, Ctrl+V, Ctrl+F, Ctrl+Shift+F4)
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/rgb.h>
+
+/* ─── Configuración global de hold-tap ─── */
+&mt {
+    flavor = "tap-preferred";
+    tapping-term-ms = <200>;
+    quick-tap-ms = <125>;
+    require-prior-idle-ms = <100>;
+};
+
+&led_strip { chain-length = <27>; };
+
+/ {
+
+    /* ═══════════════════════════════════════
+       MACROS
+       ═══════════════════════════════════════ */
+    macros {
+        /* Macro original: escribe /calificacion */
+        cal: cal {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp FSLH &kp C &kp A &kp L &kp I &kp F &kp I &kp C &kp A &kp C &kp I &kp O &kp N>;
+            label = "CAL";
+        };
+
+        term: term {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LC(LA(T))>;
+            label = "TERMINAL";
+        };
+
+        /* Símbolos de apertura */
+        m_paren_o:  m_paren_o  { compatible="zmk,behavior-macro"; #binding-cells=<0>; bindings=<&kp LPAR>;         label="M_PAREN_O";  };
+        m_brack_o:  m_brack_o  { compatible="zmk,behavior-macro"; #binding-cells=<0>; bindings=<&kp LBKT>;         label="M_BRACK_O";  };
+        m_brace_o:  m_brace_o  { compatible="zmk,behavior-macro"; #binding-cells=<0>; bindings=<&kp LBRC>;         label="M_BRACE_O";  };
+        m_angle_o:  m_angle_o  { compatible="zmk,behavior-macro"; #binding-cells=<0>; bindings=<&kp LT>;           label="M_ANGLE_O";  };
+        m_dquot_o:  m_dquot_o  { compatible="zmk,behavior-macro"; #binding-cells=<0>; bindings=<&kp DQT>;          label="M_DQUOT_O";  };
+        m_squot_o:  m_squot_o  { compatible="zmk,behavior-macro"; #binding-cells=<0>; bindings=<&kp SQT>;          label="M_SQUOT_O";  };
+        m_grave_o:  m_grave_o  { compatible="zmk,behavior-macro"; #binding-cells=<0>; bindings=<&kp GRAVE>;        label="M_GRAVE_O";  };
+        m_tilde_o:  m_tilde_o  { compatible="zmk,behavior-macro"; #binding-cells=<0>; bindings=<&kp TILDE>;        label="M_TILDE_O";  };
+
+        /* Símbolos de cierre */
+        m_paren_c:  m_paren_c  { compatible="zmk,behavior-macro"; #binding-cells=<0>; bindings=<&kp RPAR>;         label="M_PAREN_C";  };
+        m_brack_c:  m_brack_c  { compatible="zmk,behavior-macro"; #binding-cells=<0>; bindings=<&kp RBKT>;         label="M_BRACK_C";  };
+        m_brace_c:  m_brace_c  { compatible="zmk,behavior-macro"; #binding-cells=<0>; bindings=<&kp RBRC>;         label="M_BRACE_C";  };
+        m_angle_c:  m_angle_c  { compatible="zmk,behavior-macro"; #binding-cells=<0>; bindings=<&kp GT>;           label="M_ANGLE_C";  };
+        m_dquot_c:  m_dquot_c  { compatible="zmk,behavior-macro"; #binding-cells=<0>; bindings=<&kp DQT>;          label="M_DQUOT_C";  };
+        m_squot_c:  m_squot_c  { compatible="zmk,behavior-macro"; #binding-cells=<0>; bindings=<&kp SQT>;          label="M_SQUOT_C";  };
+        m_grave_c:  m_grave_c  { compatible="zmk,behavior-macro"; #binding-cells=<0>; bindings=<&kp GRAVE>;        label="M_GRAVE_C";  };
+        m_tilde_c:  m_tilde_c  { compatible="zmk,behavior-macro"; #binding-cells=<0>; bindings=<&kp TILDE>;        label="M_TILDE_C";  };
+    };
+
+    /* ═══════════════════════════════════════
+       BEHAVIORS — Double-tap para símbolos
+       tap  = símbolo de apertura
+       hold (o double-tap ≤200 ms) = cierre
+       ═══════════════════════════════════════ */
+    behaviors {
+
+        /*  ( → )  */
+        td_paren: td_paren {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&m_paren_o>, <&m_paren_c>;
+        };
+
+        /*  [ → ]  */
+        td_brack: td_brack {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&m_brack_o>, <&m_brack_c>;
+        };
+
+        /*  { → }  */
+        td_brace: td_brace {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&m_brace_o>, <&m_brace_c>;
+        };
+
+        /*  < → >  */
+        td_angle: td_angle {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&m_angle_o>, <&m_angle_c>;
+        };
+
+        /*  " → "  (mismo carácter; 2 taps escribe la comilla de cierre de par) */
+        td_dquot: td_dquot {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&m_dquot_o>, <&m_dquot_c>;
+        };
+
+        /*  ' → '  */
+        td_squot: td_squot {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&m_squot_o>, <&m_squot_c>;
+        };
+
+        /* ` → ` (backtick / segundo tap repite) */
+        td_grave: td_grave {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&m_grave_o>, <&m_grave_c>;
+        };
+
+        /* ~ → ~ */
+        td_tilde: td_tilde {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&m_tilde_o>, <&m_tilde_c>;
+        };
+    };
+
+    /* ═══════════════════════════════════════
+       KEYMAP
+       ═══════════════════════════════════════ */
+    keymap {
+        compatible = "zmk,keymap";
+
+        /* ───────────────────────────────────
+           CAPA 0 — Base QWERTY + Homerow Mods
+           ───────────────────────────────────
+           Homerow mods (mano izquierda):
+             A = GUI  |  S = ALT  |  D = CTRL  |  F = SHIFT
+           Homerow mods (mano derecha):
+             J = SHIFT  |  K = CTRL  |  L = ALT  |  ; = GUI
+
+           Pulgares:
+             [GUI]  [MO1/Space*]  [Space]   |  [Enter]  [MO2]  [Del]
+           * Space en tap, MO1 en hold
+        ─────────────────────────────────── */
+        default_layer {
+            display-name = "Base";
+            bindings = <
+&kp GRAVE      &kp Q          &kp W          &kp E           &kp R           &kp T         &kp Y      &kp U           &kp I           &kp O          &kp P             &kp BSPC
+&caps_word     &mt LGUI A     &mt LALT S     &mt LCTRL D     &mt LSHIFT F    &kp G         &kp H      &mt RSHIFT J    &mt RCTRL K     &mt RALT L     &mt RGUI SEMI     &kp SQT
+&term          &kp Z          &kp X          &kp C           &kp V           &kp B         &kp N      &kp M           &kp COMMA       &kp DOT        &kp FSLH          &kp TAB
+                                             &kp LGUI        &lt 1 ESC       &kp SPACE     &kp ENTER  &mo 2           &kp DELETE
+            >;
+        };
+
+        /* ───────────────────────────────────
+           CAPA 1 — Símbolos (izq) + Numpad (der)
+           ───────────────────────────────────
+           Izquierda:
+             Fila 1: ` ~ ! @ #
+             Fila 2: td_paren td_brack td_brace td_angle td_dquot
+             Fila 3: _ - = + (macro cal)
+
+           Derecha (Numpad):
+             Fila 1: * /  7  8  9  BSPC
+             Fila 2: -  4  5  6  +  ENTER
+             Fila 3: 0  1  2  3  .  TAB
+        ─────────────────────────────────── */
+        lower_layer {
+            display-name = "Sym/Num";
+            bindings = <
+&td_grave   &td_tilde   &kp EXCL     &kp AT       &kp HASH      &kp DOLLAR      &kp KP_MULTIPLY  &kp N7   &kp N8  &kp N9  &kp KP_SLASH   &kp BSPC
+&trans      &td_paren   &td_brack    &td_brace     &td_angle     &td_dquot       &kp KP_MINUS     &kp N4   &kp N5  &kp N6  &kp KP_PLUS    &kp ENTER
+&trans      &kp UNDER   &kp MINUS    &kp EQUAL     &kp PLUS      &cal            &kp N0           &kp N1   &kp N2  &kp N3  &kp DOT        &kp TAB
+                                     &kp LGUI      &trans        &kp SPACE       &kp ENTER        &trans   &kp DELETE
+            >;
+        };
+
+        /* ───────────────────────────────────
+           CAPA 2 — Config / Media / Combos
+           ───────────────────────────────────
+           Fila 1: F2  F3  F4  F5  F11  |  ---  ---  Vol↑  Vol↓  Mute  Del
+           Fila 2: RGB_TOG  Blanco  Cálido  Azul  Verde  |  ←sel  ←  ↓  →  →sel  PgUp
+           Fila 3: BT_CLR  BT0  BT1  BT2  BT3  |  Ctrl+C  Ctrl+V  Ctrl+F  Ctrl+Shift+F4  PrtSc  PgDn
+
+           Multimedia (pulgar derecho disponible):
+             Play/Pause, Next, Prev se ubican en el numpad-row de pulgares vía combos
+        ─────────────────────────────────── */
+        raise_layer {
+            display-name = "Config";
+            bindings = <
+&kp ESC        &kp F2           &kp F3                           &kp F4                            &kp F5                             &kp F11                              &C_VOL_DN         &C_VOL_UP       &kp UP         &kp trans      &kp C_MUTE         &kp DELETE
+&kp LSHIFT     &rgb_ug RGB_TOG  &rgb_ug RGB_COLOR_HSB(46,0,40)   &rgb_ug RGB_COLOR_HSB(42,42,35)   &rgb_ug RGB_COLOR_HSB(200,100,50)  &rgb_ug RGB_COLOR_HSB(116,100,50)    &kp LC(LS(LEFT))  &kp LEFT        &kp DOWN       &kp RIGHT      &kp LC(LS(RIGHT))  &kp PG_UP
+&kp LCTRL      &bt BT_CLR       &bt BT_SEL 0                     &bt BT_SEL 1                      &bt BT_SEL 2                       &bt BT_SEL 3                         &kp LC(C)         &kp LC(V)       &kp LC(F)      &kp LC(LS(F4)) &kp PSCRN          &kp PG_DN
+                                                                 &kp LGUI                          &trans                             &kp C_PP                             &kp C_NEXT        &trans          &kp C_PREV
+            >;
+        };
+    };
+};
