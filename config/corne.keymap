@@ -327,9 +327,9 @@
         Config {
             display-name = "Config";
             bindings = <
-&kp ESC     &kp F2           &kp F3                          &kp F4                           &kp F5                             &kp F11                              &kp C_VOLUME_DOWN  &kp C_VOLUME_UP  &kp UP      &trans          &kp C_MUTE         &kp DELETE
-&kp LSHIFT  &rgb_ug RGB_TOG  &rgb_ug RGB_COLOR_HSB(46,0,40)  &rgb_ug RGB_COLOR_HSB(42,42,35)  &rgb_ug RGB_COLOR_HSB(200,100,50)  &rgb_ug RGB_COLOR_HSB(116,100,50)    &kp LC(LS(LEFT))   &kp LEFT         &kp DOWN    &kp RIGHT       &kp LC(LS(RIGHT))  &kp PG_UP
-&kp LCTRL   &bt BT_CLR       &bt BT_SEL 0                    &bt BT_SEL 1                     &bt BT_SEL 2                       &bt BT_SEL 3                         &kp LC(C)          &kp LC(V)        &kp LC(F)   &kp LC(LS(F4))  &kp PSCRN          &kp PG_DN
+&kp ESC     &kp F2           &kp F3                          &kp F4                           &kp F5                             &kp F11                              &kp C_VOLUME_DOWN  &kp C_VOLUME_UP  &kp UP      &trans      &kp C_MUTE         &kp DELETE
+&kp LSHIFT  &rgb_ug RGB_TOG  &rgb_ug RGB_COLOR_HSB(46,0,40)  &rgb_ug RGB_COLOR_HSB(42,42,35)  &rgb_ug RGB_COLOR_HSB(200,100,50)  &rgb_ug RGB_COLOR_HSB(116,100,50)    &kp LC(LS(LEFT))   &kp LEFT         &kp DOWN    &kp RIGHT   &kp LC(LS(RIGHT))  &kp PG_UP
+&kp LCTRL   &bt BT_CLR       &bt BT_SEL 0                    &bt BT_SEL 1                     &bt BT_SEL 2                       &bt BT_SEL 3                         &kp LC(C)          &kp LC(V)        &kp LC(F)   &kp LS(F4)  &kp PSCRN          &kp PG_DN
                                                              &kp LGUI                         &trans                             &kp C_PP                             &kp C_NEXT         &trans           &kp C_PREV
             >;
         };
